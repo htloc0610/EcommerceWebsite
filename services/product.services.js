@@ -48,9 +48,6 @@ module.exports.newProduct = async (dataProduct) => {
 // Delete product
 module.exports.deleteProduct = async (productId) => {
   try {
-    const product = await Product.find({ _id: productId });
-    console.log(product);
-
     // Find product by ID and delete
     const result = await Product.findByIdAndDelete(productId);
 
@@ -65,5 +62,47 @@ module.exports.deleteProduct = async (productId) => {
     // Handle Error
     console.error(err);
     return { message: "Error deleting product" };
+  }
+};
+
+// Detail product
+module.exports.detailProduct = async (productId) => {
+  try {
+    // Find product by ID and delete
+    const result = await Product.findById(productId);
+
+    // Handle no product found
+    if (!result) {
+      return { message: "Product not found" };
+    }
+
+    // Return success message
+    return result;
+  } catch (err) {
+    // Handle Error
+    console.error(err);
+    return { message: "Error getting product" };
+  }
+};
+
+// Update product
+module.exports.updateProduct = async (productId, dataProduct) => {
+  try {
+    // Find product by ID and update
+    const result = await Product.findByIdAndUpdate(productId, dataProduct, {
+      new: true,
+    });
+
+    // Handle no product found
+    if (!result) {
+      return { message: "Product not found" };
+    }
+
+    // Return updated product
+    return result;
+  } catch (err) {
+    // Handle Error
+    console.error(err);
+    return { message: "Error updating product" };
   }
 };
