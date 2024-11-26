@@ -1,12 +1,21 @@
 const productService = require("../services/product.services");
 
 // [GET] /products
-// Get all products
+// Get products
 module.exports.index = async (req, res) => {
+  const filter = {
+    title: "name",
+    type: "desc",
+  };
+  if (req.query.title) {
+    filter.title = req.query.title;
+  }
+  if (req.query.type) {
+    filter.type = req.query.type;
+  }
   try {
     // Get all products
-    const products = await productService.getProducts();
-
+    const products = await productService.getProducts(filter);
     // Handle no products
     if (products.length === 0) {
       return res.status(404).json({ message: "No products found" });

@@ -1,11 +1,10 @@
 const Product = require("../models/product.model");
 
 // Get products
-module.exports.getProducts = async () => {
+module.exports.getProducts = async (filter) => {
   try {
     // Get all products
-    const products = await Product.find();
-
+    const products = await Product.find().sort({ [filter.title]: filter.type });
     // Handle no products
     if (products.length === 0) {
       return { message: "No products found" };
