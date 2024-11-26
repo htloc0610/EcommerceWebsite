@@ -7,14 +7,13 @@ const bodyParser = require("body-parser");
 const router = require("./routers/index.router");
 
 dotenv.config();
-
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Connect MongoDB
 mongoose

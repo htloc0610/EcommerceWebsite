@@ -15,8 +15,8 @@ router.get("/", productController.index);
 // Create new product
 router.post(
   "/",
-  //   upload.single("image"),
-  //   uploadClound.upload,
+  upload.single("image"),
+  uploadClound.upload,
   productController.newProduct
 );
 

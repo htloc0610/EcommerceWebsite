@@ -1,11 +1,12 @@
 const cloudinary = require("cloudinary").v2;
 const streamifier = require("streamifier");
+require("dotenv").config();
 
 // Cloudinary
 cloudinary.config({
-  cloud_name: process.env.CLOUNDARY_NAME,
-  api_key: process.env.CLOUNDARY_API_KEY,
-  api_secret: process.env.CLOUNDARY_SECRET_KEY,
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 // End Cloudinary
 
@@ -19,6 +20,7 @@ module.exports.upload = async function (req, res, next) {
           reject(error);
         }
       });
+
       streamifier.createReadStream(req.file.buffer).pipe(stream);
     });
   };

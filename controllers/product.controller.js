@@ -34,8 +34,6 @@ module.exports.index = async (req, res) => {
 // [POST] /products
 // Create new product
 module.exports.newProduct = async (req, res) => {
-  console.log(req.body);
-
   const dataProduct = {
     name: req.body.name,
     price: req.body.price,
