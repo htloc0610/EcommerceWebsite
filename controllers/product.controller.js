@@ -6,6 +6,7 @@ module.exports.index = async (req, res) => {
   const filter = {
     title: "name",
     type: "desc",
+    numItems: 4,
   };
   if (req.query.title) {
     filter.title = req.query.title;
@@ -33,6 +34,8 @@ module.exports.index = async (req, res) => {
 // [POST] /products
 // Create new product
 module.exports.newProduct = async (req, res) => {
+  console.log(req.body);
+
   const dataProduct = {
     name: req.body.name,
     price: req.body.price,

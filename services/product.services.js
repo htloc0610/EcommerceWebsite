@@ -4,7 +4,9 @@ const Product = require("../models/product.model");
 module.exports.getProducts = async (filter) => {
   try {
     // Get all products
-    const products = await Product.find().sort({ [filter.title]: filter.type });
+    const products = await Product.find()
+      .sort({ [filter.title]: filter.type })
+      .limit(filter.numItems);
     // Handle no products
     if (products.length === 0) {
       return { message: "No products found" };
