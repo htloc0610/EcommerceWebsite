@@ -1,4 +1,5 @@
 const productService = require("../services/product.services");
+const Product = require("../models/product.model");
 
 // [GET] /products
 // Get products
@@ -57,5 +58,26 @@ module.exports.newProduct = async (req, res) => {
       .json({ message: "Product created successfully", product });
   } else {
     return res.status(500).json({ message: "Error creating product" });
+  }
+};
+
+// [DELETE] /products/:id
+// Delete product
+module.exports.deleteProduct = async (req, res) => {
+  const productId = req.params.id;
+  try {
+    // Find product by ID and delete
+    const result = await productService.deleteProduct(productId);
+
+    // Handle no product found
+    if (!result) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    // Return success message
+    return res.status(200).json({ message: "Product deleted successfully" });
+  } catch (err) {
+    // Handle Error
+    console.error(err);
+    return res.status(500).json({ message: "Error deleting product" });
   }
 };

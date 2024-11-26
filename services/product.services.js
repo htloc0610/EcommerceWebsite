@@ -44,3 +44,26 @@ module.exports.newProduct = async (dataProduct) => {
     return null;
   }
 };
+
+// Delete product
+module.exports.deleteProduct = async (productId) => {
+  try {
+    const product = await Product.find({ _id: productId });
+    console.log(product);
+
+    // Find product by ID and delete
+    const result = await Product.findByIdAndDelete(productId);
+
+    // Handle no product found
+    if (!result) {
+      return { message: "Product not found" };
+    }
+
+    // Return success message
+    return { message: "Product deleted successfully" };
+  } catch (err) {
+    // Handle Error
+    console.error(err);
+    return { message: "Error deleting product" };
+  }
+};
