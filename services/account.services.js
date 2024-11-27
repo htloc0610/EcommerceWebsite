@@ -1,13 +1,14 @@
 const User = require("../models/user.model");
-const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const emailHelper = require("../helpers/emailService.helper");
-const saltRounds = process.env.SALTROUNDS;
 
 // Create account
 module.exports.createAccount = async (user) => {
   try {
-    const hash = await bcrypt.hash(user.password, saltRounds);
+    const hash = crypto
+      .createHash("sha256")
+      .update(user.password)
+      .digest("hex");
     const verificationToken = crypto.randomBytes(32).toString("hex");
     const newUser = new User({
       username: user.username,
@@ -45,7 +46,12 @@ module.exports.loginAccount = async (user) => {
       throw new Error("User email not verified");
     }
 
-    const isMatch = await bcrypt.compare(user.password, existingUser.password);
+    const hash = crypto
+      .createHash("sha256")
+      .update(user.password)
+      .digest("hex");
+    const isMatch = hash === existingUser.password;
+
     if (!isMatch) {
       throw new Error("Invalid password");
     }
@@ -108,7 +114,7 @@ module.exports.resetPassword = async (token, newPassword) => {
       return { message: "Invalid token" };
     }
 
-    const hash = await bcrypt.hash(newPassword, saltRounds);
+    const hash = crypto.createHash("sha256").update(newPassword).digest("hex");
     user.password = hash;
     user.resetPasswordToken = undefined; // Xóa token
     user.resetPasswordExpires = undefined; // Xóa thời gian hết hạn

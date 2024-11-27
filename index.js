@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const passport = require("passport");
 // Router
 const router = require("./routers/index.router");
 
@@ -14,6 +15,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // Connect MongoDB
 mongoose
