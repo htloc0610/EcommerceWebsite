@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const emailHelper = require("../helpers/emailService.helper");
-const saltRounds = 10;
+const saltRounds = process.env.SALTROUNDS;
 
 // Create account
 module.exports.createAccount = async (user) => {
