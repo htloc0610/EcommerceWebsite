@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
 
 const controller = require("../controllers/account.controller");
 
@@ -13,7 +14,13 @@ router.get("/register", controller.register);
 router.post("/register", controller.createAccount);
 
 // [POST] account/login
-router.post("/login", controller.loginAccount);
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/account/login",
+  })
+);
 
 // [GET] account/verify/:token
 router.get("/verify", controller.verifyAccount);

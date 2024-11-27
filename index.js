@@ -4,8 +4,12 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const passport = require("passport");
+const session = require("express-session");
 // Router
 const router = require("./routers/index.router");
+
+// Passport config
+require("./middlewares/passport.middlewares")(passport);
 
 dotenv.config();
 const app = express();
@@ -15,8 +19,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(
+  session({
+    secret: process.env.SECRET_SESSION,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.session());
+app.use(passport.initialize());
 
 // Connect MongoDB
 mongoose
