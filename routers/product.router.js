@@ -24,6 +24,10 @@ router.post(
 // Delete product
 router.delete("/:id", productController.deleteProduct);
 
+// [GET] /products/find
+// Find product
+router.get("/find", productController.findProduct);
+
 // [GET] /products/:id
 // Get detail product
 router.get("/:id", productController.detailProduct);

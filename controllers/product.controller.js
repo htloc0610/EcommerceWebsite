@@ -134,3 +134,24 @@ module.exports.updateProduct = async (req, res) => {
     return res.status(500).json({ message: "Error updating product" });
   }
 };
+
+// [GET] /products/find
+// Find products
+module.exports.findProduct = async (req, res) => {
+  try {
+    const productName = req.query.name;
+
+    // Get all products
+    const products = await productService.findProduct(productName);
+    // Handle no products
+    if (products.length === 0) {
+      return res.status(404).json({ message: "No products found" });
+    }
+    // Return all products
+    return res.status(200).json(products);
+  } catch (err) {
+    // Handle Error
+    console.error(err);
+    return res.status(500).json({ message: "Error fetching products" });
+  }
+};

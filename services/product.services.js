@@ -106,3 +106,24 @@ module.exports.updateProduct = async (productId, dataProduct) => {
     return { message: "Error updating product" };
   }
 };
+
+// Get products
+module.exports.findProduct = async (productName) => {
+  try {
+    // Get all products using regex for case-insensitive search
+    const products = await Product.find({
+      name: { $regex: new RegExp(productName, "i") },
+    });
+    // Handle no products
+    if (products.length === 0) {
+      return { message: "No products found" };
+    }
+
+    // Return all products
+    return products;
+  } catch (err) {
+    // Handle Error
+    console.error(err);
+    return { message: "Error fetching products" };
+  }
+};
