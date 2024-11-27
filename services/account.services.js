@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+const emailHelper = require("../helpers/emailService.helper");
 const saltRounds = 10;
 
 // Create account
@@ -16,6 +17,7 @@ module.exports.createAccount = async (user) => {
     });
 
     const savedUser = await newUser.save();
+    emailHelper.sendVerificationEmail(user.email, verificationToken);
     const {
       password,
       verificationToken: token,
@@ -39,14 +41,39 @@ module.exports.loginAccount = async (user) => {
       throw new Error("User not found");
     }
 
+    if (!existingUser.isVerified) {
+      throw new Error("User email not verified");
+    }
+
     const isMatch = await bcrypt.compare(user.password, existingUser.password);
     if (!isMatch) {
       throw new Error("Invalid password");
     }
 
-    const { password, ...userWithoutPassword } = existingUser.toObject();
+    const { password, isVerified, ...userWithoutPassword } =
+      existingUser.toObject();
     return { message: "Login successful", user: userWithoutPassword };
   } catch (err) {
-    return { message: "Error logging in" };
+    return { message: "Error logging in", error: err.message };
+  }
+};
+
+// Verify account
+module.exports.verifyAccount = async (token) => {
+  try {
+    // Find user
+    const user = await User.findOne({ verificationToken: token });
+    if (!user) {
+      return { error: "Invalid or expired token." };
+    }
+
+    // Cập nhật trạng thái xác minh
+    user.isVerified = true;
+    user.verificationToken = undefined; // Xóa token sau khi xác minh
+    await user.save();
+
+    return { message: "Email verification successful!" };
+  } catch (err) {
+    return { error: err.message };
   }
 };

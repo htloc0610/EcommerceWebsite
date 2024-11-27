@@ -35,3 +35,19 @@ module.exports.loginAccount = async (req, res) => {
     res.status(500).send("Error logging in");
   }
 };
+
+// [GET] account/verify/:token
+module.exports.verifyAccount = async (req, res) => {
+  const { token } = req.query;
+  try {
+    // Find user
+    const user = await accountService.verifyAccount(token);
+    if (user.error) {
+      return res.status(400).send(user.error);
+    }
+
+    res.send(user.message);
+  } catch (err) {
+    res.status(500).send("Error verifying account");
+  }
+};

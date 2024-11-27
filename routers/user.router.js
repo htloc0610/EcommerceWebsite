@@ -15,4 +15,7 @@ router.post("/register", controller.createAccount);
 // [POST] account/login
 router.post("/login", controller.loginAccount);
 
+// [GET] account/verify/:token
+router.get("/verify", controller.verifyAccount);
+
 module.exports = router;
