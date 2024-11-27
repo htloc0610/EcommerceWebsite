@@ -77,3 +77,46 @@ module.exports.verifyAccount = async (token) => {
     return { error: err.message };
   }
 };
+
+// Forgot password
+module.exports.forgotPassword = async (email) => {
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return { message: "User not found" };
+    }
+    const token = crypto.randomBytes(32).toString("hex");
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+    await user.save();
+    await emailHelper.sendResetPasswordEmail(user.email, token);
+    return { message: "Password reset email sent" };
+  } catch (error) {
+    return { message: "Internal server error" };
+  }
+};
+
+// Reset password
+module.exports.resetPassword = async (token, newPassword) => {
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return { message: "Invalid token" };
+    }
+
+    const hash = await bcrypt.hash(newPassword, saltRounds);
+    user.password = hash;
+    user.resetPasswordToken = undefined; // Xóa token
+    user.resetPasswordExpires = undefined; // Xóa thời gian hết hạn
+    await user.save();
+
+    return { message: "Password reset successful" };
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    return { message: "Internal server error" };
+  }
+};

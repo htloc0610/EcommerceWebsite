@@ -38,16 +38,37 @@ module.exports.loginAccount = async (req, res) => {
 
 // [GET] account/verify/:token
 module.exports.verifyAccount = async (req, res) => {
-  const { token } = req.query;
   try {
+    const { token } = req.query;
     // Find user
     const user = await accountService.verifyAccount(token);
     if (user.error) {
       return res.status(400).send(user.error);
     }
-
-    res.send(user.message);
+    res.redirect("account/login");
   } catch (err) {
     res.status(500).send("Error verifying account");
+  }
+};
+
+// [POST] account/forgot-password/:email
+module.exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    await accountService.forgotPassword(email);
+    res.status(200).send("Password reset link sent");
+  } catch (err) {
+    res.status(500).send("Error sending password reset link");
+  }
+};
+
+// [POST] account/reset-password/
+module.exports.resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+    const user = await accountService.resetPassword(token, newPassword);
+    res.status(200).send(user.message);
+  } catch (err) {
+    res.status(500).send("Error resetting password");
   }
 };
