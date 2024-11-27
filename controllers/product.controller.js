@@ -4,6 +4,7 @@ const productService = require("../services/product.services");
 // Get products
 module.exports.index = async (req, res) => {
   const filter = {
+    deleted: false,
     title: "name",
     type: "desc",
     numItems: 4,

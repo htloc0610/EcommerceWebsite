@@ -4,7 +4,7 @@ const Product = require("../models/product.model");
 module.exports.getProducts = async (filter) => {
   try {
     // Get all products
-    const products = await Product.find()
+    const products = await Product.find({ deleted: filter.deleted })
       .sort({ [filter.title]: filter.type })
       .limit(filter.numItems);
     // Handle no products
@@ -49,7 +49,11 @@ module.exports.newProduct = async (dataProduct) => {
 module.exports.deleteProduct = async (productId) => {
   try {
     // Find product by ID and delete
-    const result = await Product.findByIdAndDelete(productId);
+    const result = await Product.findByIdAndUpdate(
+      productId,
+      { deleted: true },
+      { new: true }
+    );
 
     // Handle no product found
     if (!result) {
@@ -69,7 +73,7 @@ module.exports.deleteProduct = async (productId) => {
 module.exports.detailProduct = async (productId) => {
   try {
     // Find product by ID and delete
-    const result = await Product.findById(productId);
+    const result = await Product.findOne({ _id: productId, deleted: false });
 
     // Handle no product found
     if (!result) {
@@ -112,6 +116,7 @@ module.exports.findProduct = async (productName) => {
   try {
     // Get all products using regex for case-insensitive search
     const products = await Product.find({
+      deleted: false,
       name: { $regex: new RegExp(productName, "i") },
     });
     // Handle no products
