@@ -6,19 +6,24 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      trim: true, // Loại bỏ khoảng trắng đầu và cuối
+      trim: true,
     },
     email: {
       type: String,
       required: true,
       unique: true,
-      lowercase: true, // Chuyển email thành chữ thường
-      match: [/\S+@\S+\.\S+/, "Invalid email format"], // Kiểm tra định dạng email
+      match: [/\S+@\S+\.\S+/, "Invalid email format"],
     },
     password: {
       type: String,
       required: true,
-      minlength: 6, // Mật khẩu phải có ít nhất 6 ký tự
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
     },
     createdAt: {
       type: Date,
@@ -28,7 +33,7 @@ const userSchema = new mongoose.Schema(
       type: Date,
     },
   },
-  { timestamps: true } // Tự động thêm `createdAt` và `updatedAt`
+  { timestamps: true }
 );
 
 // Tạo model
