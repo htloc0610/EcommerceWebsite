@@ -12,11 +12,19 @@ module.exports.register = (req, res) => {
 
 // [POST] account/register
 module.exports.createAccount = async (req, res) => {
-  const { username, email, password } = req.body;
-  const user = { username, email, password };
+  const { username, email, password, role } = req.body;
+  const user = {
+    username,
+    email,
+    password,
+    role: role || "user", // Default role to "user" if not provided
+  };
 
   try {
-    const savedUser = await accountService.createAccount(user);
+    const savedUser = await accountService.createAccount({
+      username: user,
+      isDeleted: false,
+    });
     res.status(201).send(savedUser);
   } catch (err) {
     console.error("Error creating account:", err);
