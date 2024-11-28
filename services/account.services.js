@@ -37,7 +37,10 @@ module.exports.createAccount = async (user) => {
 // Login account
 module.exports.loginAccount = async (user) => {
   try {
-    const existingUser = await User.findOne({ username: user.username });
+    const existingUser = await User.findOne({
+      username: user.username,
+      isDeleted: false,
+    });
     if (!existingUser) {
       throw new Error("User not found");
     }
@@ -69,6 +72,10 @@ module.exports.verifyAccount = async (token) => {
   try {
     // Find user
     const user = await User.findOne({ verificationToken: token });
+    if (user.isDeleted) {
+      return { error: "User account is deleted." };
+    }
+
     if (!user) {
       return { error: "Invalid or expired token." };
     }
@@ -87,9 +94,12 @@ module.exports.verifyAccount = async (token) => {
 // Forgot password
 module.exports.forgotPassword = async (email) => {
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email, isDeleted: false });
     if (!user) {
       return { message: "User not found" };
+    }
+    if (user.isDeleted) {
+      return { error: "User account is deleted." };
     }
     const token = crypto.randomBytes(32).toString("hex");
     user.resetPasswordToken = token;
@@ -109,6 +119,10 @@ module.exports.resetPassword = async (token, newPassword) => {
       resetPasswordToken: token,
       resetPasswordExpires: { $gt: Date.now() },
     });
+
+    if (user.isDeleted) {
+      return { error: "User account is deleted." };
+    }
 
     if (!user) {
       return { message: "Invalid token" };
