@@ -72,3 +72,13 @@ module.exports.resetPassword = async (req, res) => {
     res.status(500).send("Error resetting password");
   }
 };
+
+// [GET] account/logout
+module.exports.logout = (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/account/login");
+  });
+};
