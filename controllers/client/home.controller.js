@@ -1,4 +1,12 @@
 // [GET] /
 module.exports.index = (req, res) => {
-  res.send("Home page");
+  if (!req.isAuthenticated()) {
+    return res.redirect("account/login");
+  }
+  res.send(`
+    <h1>Profile</h1>
+    <p>Username: ${req.user.username}</p>
+    <p>Email: ${req.user.email}</p>
+    <a href="account/logout">Logout</a>
+  `);
 };

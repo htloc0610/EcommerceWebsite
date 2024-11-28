@@ -34,4 +34,18 @@ router.post("/reset-password", controller.resetPassword);
 // [GET] account/logout
 router.get("/logout", controller.logout);
 
+// [GET] account/auth/google
+router.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/account/login" }),
+  (req, res) => {
+    res.redirect("/");
+  }
+);
+
 module.exports = router;
