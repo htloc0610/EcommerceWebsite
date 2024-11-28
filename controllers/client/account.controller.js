@@ -45,7 +45,7 @@ module.exports.verifyAccount = async (req, res) => {
     if (user.error) {
       return res.status(400).send(user.error);
     }
-    res.redirect("/login");
+    res.redirect("/account/login");
   } catch (err) {
     res.status(500).send("Error verifying account");
   }
