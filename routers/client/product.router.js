@@ -3,9 +3,9 @@ const multer = require("multer");
 const router = express.Router();
 
 const upload = multer();
-const uploadClound = require("../middlewares/uploadClound.middlewares");
+const uploadClound = require("../../middlewares/uploadClound.middlewares");
 
-const productController = require("../controllers/product.controller");
+const productController = require("../../controllers/client/product.controller");
 
 // [GET] /products
 // Get all products

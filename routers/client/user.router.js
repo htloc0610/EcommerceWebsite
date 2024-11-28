@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 
-const controller = require("../controllers/account.controller");
+const controller = require("../../controllers/client/account.controller");
 
 // [GET] account/login
 router.get("/login", controller.index);

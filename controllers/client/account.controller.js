@@ -1,4 +1,4 @@
-const accountService = require("../services/account.services");
+const accountService = require("../../services/client/account.services");
 
 // [GET] account/login
 module.exports.index = (req, res) => {

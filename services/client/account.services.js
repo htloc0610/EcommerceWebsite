@@ -1,6 +1,6 @@
-const User = require("../models/user.model");
+const User = require("../../models/user.model");
+const emailHelper = require("../../helpers/emailService.helper");
 const crypto = require("crypto");
-const emailHelper = require("../helpers/emailService.helper");
 
 // Create account
 module.exports.createAccount = async (user) => {

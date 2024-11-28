@@ -1,4 +1,4 @@
-const productService = require("../services/product.services");
+const productService = require("../../services/client/product.services");
 
 // [GET] /products
 // Get products

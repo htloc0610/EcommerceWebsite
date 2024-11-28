@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const session = require("express-session");
 // Router
-const router = require("./routers/index.router");
+const router = require("./routers/client/index.router");
 
 // Passport config
 require("./middlewares/passport.middlewares")(passport);
