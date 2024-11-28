@@ -20,6 +20,7 @@ module.exports.createAccount = async (user) => {
     });
 
     const savedUser = await newUser.save();
+
     emailHelper.sendVerificationEmail(user.email, verificationToken);
     const {
       password,

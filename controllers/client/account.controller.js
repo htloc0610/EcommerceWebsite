@@ -21,10 +21,7 @@ module.exports.createAccount = async (req, res) => {
   };
 
   try {
-    const savedUser = await accountService.createAccount({
-      username: user,
-      isDeleted: false,
-    });
+    const savedUser = await accountService.createAccount(user);
     res.status(201).send(savedUser);
   } catch (err) {
     console.error("Error creating account:", err);
