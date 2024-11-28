@@ -24,7 +24,6 @@ module.exports.createAccount = async (req, res) => {
     const savedUser = await accountService.createAccount(user);
     res.status(201).send(savedUser);
   } catch (err) {
-    console.error("Error creating account:", err);
     res.status(500).send("Error creating account");
   }
 };
@@ -50,7 +49,7 @@ module.exports.verifyAccount = async (req, res) => {
     if (user.error) {
       return res.status(400).send(user.error);
     }
-    res.redirect("/login");
+    res.redirect("/account/login");
   } catch (err) {
     res.status(500).send("Error verifying account");
   }

@@ -4,8 +4,6 @@ const crypto = require("crypto");
 
 // Create account
 module.exports.createAccount = async (user) => {
-  console.log(user);
-
   try {
     const hash = crypto
       .createHash("sha256")
@@ -75,12 +73,13 @@ module.exports.verifyAccount = async (token) => {
   try {
     // Find user
     const user = await User.findOne({ verificationToken: token });
-    if (user.isDeleted) {
-      return { error: "User account is deleted." };
-    }
 
     if (!user) {
       return { error: "Invalid or expired token." };
+    }
+
+    if (user.isDeleted) {
+      return { error: "User account is deleted." };
     }
 
     // Cập nhật trạng thái xác minh
@@ -97,7 +96,7 @@ module.exports.verifyAccount = async (token) => {
 // Forgot password
 module.exports.forgotPassword = async (email) => {
   try {
-    const user = await User.findOne({ email, isDeleted: false });
+    const user = await User.findOne({ email: email, isDeleted: false });
     if (!user) {
       return { message: "User not found" };
     }
@@ -123,12 +122,12 @@ module.exports.resetPassword = async (token, newPassword) => {
       resetPasswordExpires: { $gt: Date.now() },
     });
 
-    if (user.isDeleted) {
-      return { error: "User account is deleted." };
-    }
-
     if (!user) {
       return { message: "Invalid token" };
+    }
+
+    if (user.isDeleted) {
+      return { error: "User account is deleted." };
     }
 
     const hash = crypto.createHash("sha256").update(newPassword).digest("hex");
