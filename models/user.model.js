@@ -38,14 +38,14 @@ const userSchema = new mongoose.Schema(
     resetPasswordExpires: {
       type: Date,
     },
-    isDeleted: {
-      type: Boolean,
-      default: false,
-    },
     role: {
       type: String,
       enum: ["user", "admin"],
       default: "user", // Default user
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

@@ -4,6 +4,8 @@ const crypto = require("crypto");
 
 // Create account
 module.exports.createAccount = async (user) => {
+  console.log(user);
+
   try {
     const hash = crypto
       .createHash("sha256")
