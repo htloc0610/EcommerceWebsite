@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema(
+const adminUserSchema = new mongoose.Schema(
   {
     username: {
       type: String,
@@ -17,13 +17,6 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-    },
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
-    verificationToken: {
-      type: String,
     },
     createdAt: {
       type: Date,
@@ -47,6 +40,6 @@ const userSchema = new mongoose.Schema(
 );
 
 // Tạo model
-const User = mongoose.model("User", userSchema, "users");
+const adminUser = mongoose.model("adminUser", adminUserSchema, "adminUsers");
 
-module.exports = User;
+module.exports = adminUser;

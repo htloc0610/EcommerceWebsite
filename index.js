@@ -7,6 +7,7 @@ const passport = require("passport");
 const session = require("express-session");
 // Router
 const router = require("./routers/client/index.router");
+const routerAmin = require("./routers/admin/adminIndex.router");
 
 // Passport config
 require("./middlewares/passport.middlewares")(passport);
@@ -37,6 +38,7 @@ mongoose
 
 // Use router
 router(app);
+routerAmin(app);
 
 // Start server
 const PORT = process.env.PORT || 5000;

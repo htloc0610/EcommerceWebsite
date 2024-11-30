@@ -1,16 +1,16 @@
-const accountService = require("../../services/client/account.services");
+const accountService = require("../../services/admin/adminAccount.services");
 
-// [GET] account/login
+// [GET] admin/account/login
 module.exports.index = (req, res) => {
-  res.send("Login page");
+  res.send("Login admin page");
 };
 
-// [GET] account/register
+// [GET] admin/account/register
 module.exports.register = (req, res) => {
-  res.send("Register page");
+  res.send("Register admin page");
 };
 
-// [POST] account/register
+// [POST] admin/account/register
 module.exports.createAccount = async (req, res) => {
   const { username, email, password } = req.body;
   const user = {
@@ -18,7 +18,6 @@ module.exports.createAccount = async (req, res) => {
     email,
     password,
   };
-
   try {
     const savedUser = await accountService.createAccount(user);
     res.status(201).send(savedUser);
@@ -27,7 +26,7 @@ module.exports.createAccount = async (req, res) => {
   }
 };
 
-// [POST] account/login
+// [POST] admin/account/login
 module.exports.loginAccount = async (req, res) => {
   const { username, password } = req.body;
   const user = { username, password };
@@ -39,22 +38,7 @@ module.exports.loginAccount = async (req, res) => {
   }
 };
 
-// [GET] account/verify/:token
-module.exports.verifyAccount = async (req, res) => {
-  try {
-    const { token } = req.query;
-    // Find user
-    const user = await accountService.verifyAccount(token);
-    if (user.error) {
-      return res.status(400).send(user.error);
-    }
-    res.redirect("/account/login");
-  } catch (err) {
-    res.status(500).send("Error verifying account");
-  }
-};
-
-// [POST] account/forgot-password/:email
+// [POST] admin/account/forgot-password/:email
 module.exports.forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -65,7 +49,7 @@ module.exports.forgotPassword = async (req, res) => {
   }
 };
 
-// [POST] account/reset-password/
+// [POST] admin/account/reset-password/
 module.exports.resetPassword = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
@@ -76,12 +60,12 @@ module.exports.resetPassword = async (req, res) => {
   }
 };
 
-// [GET] account/logout
+// [GET] admin/account/logout
 module.exports.logout = (req, res, next) => {
   req.logout((err) => {
     if (err) {
       return next(err);
     }
-    res.redirect("/account/login");
+    res.redirect("admin/account/login");
   });
 };

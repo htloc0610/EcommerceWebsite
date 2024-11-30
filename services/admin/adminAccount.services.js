@@ -1,4 +1,4 @@
-const User = require("../../models/user.model");
+const adminUser = require("../../models/adminUser.model");
 const emailHelper = require("../../helpers/emailService.helper");
 const crypto = require("crypto");
 
@@ -9,17 +9,14 @@ module.exports.createAccount = async (user) => {
       .createHash("sha256")
       .update(user.password)
       .digest("hex");
-    const verificationToken = crypto.randomBytes(32).toString("hex");
-    const newUser = new User({
+    const newUser = new adminUser({
       username: user.username,
       email: user.email,
       password: hash,
-      verificationToken: verificationToken,
     });
 
     const savedUser = await newUser.save();
 
-    emailHelper.sendVerificationEmail(user.email, verificationToken);
     const {
       password,
       verificationToken: token,
@@ -37,16 +34,12 @@ module.exports.createAccount = async (user) => {
 // Login account
 module.exports.loginAccount = async (user) => {
   try {
-    const existingUser = await User.findOne({
+    const existingUser = await adminUser.findOne({
       username: user.username,
       isDeleted: false,
     });
     if (!existingUser) {
       throw new Error("User not found");
-    }
-
-    if (!existingUser.isVerified) {
-      throw new Error("User email not verified");
     }
 
     const hash = crypto
@@ -59,43 +52,17 @@ module.exports.loginAccount = async (user) => {
       throw new Error("Invalid password");
     }
 
-    const { password, isVerified, ...userWithoutPassword } =
-      existingUser.toObject();
+    const { password, ...userWithoutPassword } = existingUser.toObject();
     return { message: "Login successful", user: userWithoutPassword };
   } catch (err) {
     return { message: "Error logging in", error: err.message };
   }
 };
 
-// Verify account
-module.exports.verifyAccount = async (token) => {
-  try {
-    // Find user
-    const user = await User.findOne({ verificationToken: token });
-
-    if (!user) {
-      return { error: "Invalid or expired token." };
-    }
-
-    if (user.isDeleted) {
-      return { error: "User account is deleted." };
-    }
-
-    // Cập nhật trạng thái xác minh
-    user.isVerified = true;
-    user.verificationToken = undefined; // Xóa token sau khi xác minh
-    await user.save();
-
-    return { message: "Email verification successful!" };
-  } catch (err) {
-    return { error: err.message };
-  }
-};
-
 // Forgot password
 module.exports.forgotPassword = async (email) => {
   try {
-    const user = await User.findOne({ email: email, isDeleted: false });
+    const user = await adminUser.findOne({ email: email, isDeleted: false });
     if (!user) {
       return { message: "User not found" };
     }
@@ -116,7 +83,7 @@ module.exports.forgotPassword = async (email) => {
 // Reset password
 module.exports.resetPassword = async (token, newPassword) => {
   try {
-    const user = await User.findOne({
+    const user = await adminUser.findOne({
       resetPasswordToken: token,
       resetPasswordExpires: { $gt: Date.now() },
     });
