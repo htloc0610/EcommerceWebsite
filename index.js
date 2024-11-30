@@ -29,27 +29,6 @@ app.use(
 app.use(passport.session());
 app.use(passport.initialize());
 
-const paymentHelper = require("./helpers/paymentService.helper");
-
-app.get("/test", async (req, res) => {
-  const requestData = {
-    orderCode: 2342246,
-    amount: 2000,
-    description: "Thanh toan don hang",
-    items: [
-      {
-        name: "Mì tôm hảo hảo ly",
-        quantity: 1,
-        price: 1000,
-      },
-    ],
-    cancelUrl: "http://127.0.0.1:3000/account/login",
-    returnUrl: "http://127.0.0.1:3000/products/67466c5df4d1172583c2845b",
-  };
-  const paymentLink = paymentHelper.createPaymentLink(requestData);
-  res.redirect(303, (await paymentLink).checkoutUrl);
-});
-
 // Connect MongoDB
 mongoose
   .connect(process.env.MONGO_URI)
