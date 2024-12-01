@@ -16,7 +16,7 @@ router.post("/register", controller.createAccount);
 // [POST] account/login
 router.post(
   "/login",
-  passport.authenticate("local", {
+  passport.authenticate("user-login", {
     successRedirect: "/",
     failureRedirect: "/account/login",
   })

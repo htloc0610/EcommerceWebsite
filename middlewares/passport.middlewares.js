@@ -37,7 +37,7 @@ module.exports = function (passport) {
   );
 
   // Local Strategy
-  passport.use(
+  passport.use('user-login',
     new LocalStrategy(
       {
         username: "username",

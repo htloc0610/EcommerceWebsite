@@ -38,28 +38,6 @@ module.exports.loginAccount = async (req, res) => {
   }
 };
 
-// [POST] admin/account/forgot-password/:email
-module.exports.forgotPassword = async (req, res) => {
-  try {
-    const { email } = req.body;
-    await accountService.forgotPassword(email);
-    res.status(200).send("Password reset link sent");
-  } catch (err) {
-    res.status(500).send("Error sending password reset link");
-  }
-};
-
-// [POST] admin/account/reset-password/
-module.exports.resetPassword = async (req, res) => {
-  try {
-    const { token, newPassword } = req.body;
-    const user = await accountService.resetPassword(token, newPassword);
-    res.status(200).send(user.message);
-  } catch (err) {
-    res.status(500).send("Error resetting password");
-  }
-};
-
 // [GET] admin/account/logout
 module.exports.logout = (req, res, next) => {
   req.logout((err) => {
