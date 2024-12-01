@@ -44,6 +44,6 @@ module.exports.logout = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect("admin/account/login");
+    res.redirect("/admin/account/login");
   });
 };

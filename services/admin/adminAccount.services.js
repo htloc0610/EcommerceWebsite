@@ -36,7 +36,6 @@ module.exports.loginAccount = async (user) => {
   try {
     const existingUser = await adminUser.findOne({
       username: user.username,
-      isDeleted: false,
     });
     if (!existingUser) {
       throw new Error("User not found");

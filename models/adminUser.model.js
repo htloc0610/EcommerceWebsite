@@ -18,22 +18,16 @@ const adminUserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    role: {
+      type: String,
+      default: "admin",
+    },
     createdAt: {
       type: Date,
       default: Date.now,
     },
     updatedAt: {
       type: Date,
-    },
-    resetPasswordToken: {
-      type: String,
-    },
-    resetPasswordExpires: {
-      type: Date,
-    },
-    isDeleted: {
-      type: Boolean,
-      default: false,
     },
   },
   { timestamps: true }
