@@ -10,6 +10,6 @@ router.get("/", controller.index);
 router.get("/pay", controller.pay);
 
 // [GET] /payment/success
-router.get("/success", controller.success);
+router.get("/success/:id", controller.success);
 
 module.exports = router;

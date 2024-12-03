@@ -1,7 +1,7 @@
 const Payment = require("../../models/payment.model");
 const cart = require("../../models/cart.model");
 
-// Get products
+// Get payment
 module.exports.getPayment = async (userId) => {
   try {
     // Get all payments for the user
@@ -29,5 +29,23 @@ module.exports.getPayment = async (userId) => {
     // Handle Error
     console.error(err);
     return { message: "Error fetching payments" };
+  }
+};
+
+//Success
+module.exports.setPaymentStatusSuccess = async (paymentId) => {
+  try {
+    const payment = await Payment.findOneAndUpdate(
+      { _id: paymentId },
+      { status: "completed" },
+      { new: true }
+    );
+    if (!payment) {
+      return { message: "Payment not found" };
+    }
+    return { message: "Payment status updated to success", payment };
+  } catch (err) {
+    console.error(err);
+    return { message: "Error updating payment status" };
   }
 };

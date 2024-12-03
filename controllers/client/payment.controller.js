@@ -15,9 +15,8 @@ module.exports.pay = async (req, res) => {
     }
 
     const { payment, items } = await paymentService.getPayment(paymentId);
-    if (!payment) {
-      return res.status(404).send("Payment not found.");
-    }
+
+    console.log(`${payment._id}`);
 
     // Chuẩn bị dữ liệu để tạo liên kết thanh toán
     const requestData = {
@@ -41,5 +40,15 @@ module.exports.pay = async (req, res) => {
 
 // [GET] /payment/success
 module.exports.success = async (req, res) => {
-  res.send("Payment success");
+  const paymentId = req.params.id;
+  if (!paymentId) {
+    return res.status(400).send("Payment ID is required.");
+  }
+
+  try {
+    await paymentService.setPaymentStatusSuccess(paymentId);
+    res.send("Payment status success.");
+  } catch (error) {
+    res.status(500).send("Failed to update payment status.");
+  }
 };
