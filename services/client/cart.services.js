@@ -20,9 +20,12 @@ module.exports.getCarts = async (filter) => {
 module.exports.addToCart = async (userId, productId, quantity) => {
   try {
     let userCart = await cart.findOne({ userId });
-
     if (!userCart) {
-      userCart = new cart({ userId, items: [{ productId, quantity }] });
+      const product = await Product.findById(productId);
+      userCart = new cart({
+        userId,
+        items: [{ productId, name: product.name, quantity }],
+      });
     } else {
       const itemIndex = userCart.items.findIndex(
         (item) => item.productId.toString() === productId

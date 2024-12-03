@@ -14,6 +14,10 @@ const cartSchema = new mongoose.Schema(
           ref: "Product", // Tham chiếu đến bảng Product
           required: true,
         },
+        name: {
+          type: String,
+          required: true,
+        },
         quantity: { type: Number, required: true, min: 1 },
       },
     ],
@@ -23,18 +27,4 @@ const cartSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-cartSchema.pre("save", async function (next) {
-  if (this.isModified("items")) {
-    const productIds = this.items.map((item) => item.productId);
-    const products = await mongoose
-      .model("Product")
-      .find({ _id: { $in: productIds } });
-
-    this.totalPrice = this.items.reduce((total, item) => {
-      const product = products.find((p) => p._id.equals(item.productId));
-      return total + product.price * item.quantity;
-    }, 0);
-  }
-  next();
-});
 module.exports = mongoose.model("Cart", cartSchema, "carts");
