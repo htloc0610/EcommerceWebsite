@@ -14,36 +14,23 @@ module.exports.pay = async (req, res) => {
       return res.status(400).send("Payment ID is required.");
     }
 
-    const payment = await paymentService.getPayment(paymentId);
+    const { payment, items } = await paymentService.getPayment(paymentId);
     if (!payment) {
       return res.status(404).send("Payment not found.");
     }
 
     // Chuẩn bị dữ liệu để tạo liên kết thanh toán
     const requestData = {
-      orderCode: payment.transactionId,
+      orderCode: Math.floor(Math.random() * 1000000),
       amount: payment.amountPaid,
       description: "Thanh toan don hang",
-      items: [
-        {
-          name: "Mì tôm hảo hảo ly",
-          quantity: 1,
-          price: 10,
-        },
-      ],
+      items: items,
       cancelUrl: "http://127.0.0.1:3000/account/login",
-      returnUrl: "http://127.0.0.1:3000/payment/success",
+      returnUrl: `http://127.0.0.1:3000/payment/success/${payment._id}`,
     };
 
     // Gọi hàm tạo liên kết thanh toán
-    const paymentLink = await paymentMethod.createPaymentLink(
-      requestData.orderCode,
-      requestData.amount,
-      requestData.description,
-      requestData.items,
-      requestData.returnUrl,
-      requestData.cancelUrl
-    );
+    const paymentLink = await paymentMethod.createPaymentLink(requestData);
 
     // Redirect đến URL thanh toán
     res.redirect(303, await paymentLink.checkoutUrl);

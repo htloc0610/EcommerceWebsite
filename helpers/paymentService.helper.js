@@ -6,6 +6,10 @@ const payos = new PayOS(
   process.env.PAYOS_CHECKSUM_KEY
 );
 
+module.exports.createPaymentLink = async (requestData) => {
+  return await payos.createPaymentLink(requestData);
+};
+
 // app.get("/test", async (req, res) => {
 //   const requestData = {
 //     orderCode: 2342246,
@@ -25,21 +29,21 @@ const payos = new PayOS(
 //   res.redirect(303, (await paymentLink).checkoutUrl);
 // });
 
-module.exports.createPaymentLink = async (
-  orderCode,
-  amount,
-  description,
-  items,
-  returnUrl,
-  cancelUrl
-) => {
-  const requestData = {
-    orderCode: Math.floor(Math.random() * 1000000),
-    amount: amount,
-    description: description,
-    items: items,
-    cancelUrl: cancelUrl,
-    returnUrl: returnUrl,
-  };
-  return await payos.createPaymentLink(requestData);
-};
+// module.exports.createPaymentLink = async (
+//   orderCode,
+//   amount,
+//   description,
+//   items,
+//   returnUrl,
+//   cancelUrl
+// ) => {
+//   const requestData = {
+//     orderCode: Math.floor(Math.random() * 1000000),
+//     amount: amount,
+//     description: description,
+//     items: items,
+//     cancelUrl: cancelUrl,
+//     returnUrl: returnUrl,
+//   };
+//   return await payos.createPaymentLink(requestData);
+// };

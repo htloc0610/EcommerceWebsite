@@ -22,7 +22,6 @@ const paymentSchema = new mongoose.Schema(
       default: Date.now,
     },
     amountPaid: { type: Number, required: true },
-    transactionId: { type: String, required: true },
   },
   { timestamps: true }
 );

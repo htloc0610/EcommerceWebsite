@@ -24,7 +24,9 @@ module.exports.addToCart = async (userId, productId, quantity) => {
       const product = await Product.findById(productId);
       userCart = new cart({
         userId,
-        items: [{ productId, name: product.name, quantity }],
+        items: [
+          { productId, name: product.name, quantity, price: product.price },
+        ],
       });
     } else {
       const itemIndex = userCart.items.findIndex(
@@ -99,7 +101,6 @@ module.exports.payment = async (userId) => {
       userId,
       cartId: userCart._id,
       amountPaid: userCart.totalPrice,
-      transactionId: `${Math.floor(Math.random() * 1000000000)}`,
     });
 
     await payment.save();
