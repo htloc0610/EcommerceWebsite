@@ -45,7 +45,7 @@ module.exports.paymentProducts = async (req, res) => {
   try {
     const { userId } = req.body;
     const result = await cartService.payment(userId);
-    return res.status(200).json(result);
+    return res.redirect(`http://127.0.0.1:3000/payment?id=${userId}`);
   } catch (err) {
     return res.status(500).json({ message: "Error payment" });
   }

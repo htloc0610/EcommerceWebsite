@@ -2,6 +2,7 @@ const homeRouter = require("./home.router");
 const productRouter = require("./product.router");
 const userRouter = require("./user.router");
 const cartRouter = require("./cart.router");
+const paymentRouter = require("./payment.router");
 
 module.exports = (app) => {
   // Home
@@ -15,4 +16,7 @@ module.exports = (app) => {
 
   // Cart
   app.use("/cart", cartRouter);
+
+  // Payment
+  app.use("/payment", paymentRouter);
 };
