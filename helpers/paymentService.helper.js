@@ -34,12 +34,12 @@ module.exports.createPaymentLink = async (
   cancelUrl
 ) => {
   const requestData = {
-    orderCode: orderCode,
+    orderCode: Math.floor(Math.random() * 1000000),
     amount: amount,
     description: description,
     items: items,
     cancelUrl: cancelUrl,
     returnUrl: returnUrl,
   };
-  return await payos.createPaymentLink(requestData).checkoutUrl;
+  return await payos.createPaymentLink(requestData);
 };

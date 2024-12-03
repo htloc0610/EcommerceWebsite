@@ -4,7 +4,9 @@ const Payment = require("../../models/payment.model");
 module.exports.getPayment = async (userId) => {
   try {
     // Get all payments for the user
-    const payments = await Payment.find({ userId: userId });
+    const payments = await Payment.findOne({ userId: userId }).select(
+      "_id userId amountPaid transactionId"
+    );
     // Handle no payments
     if (payments.length === 0) {
       return { message: "No payments found" };
